@@ -8,9 +8,9 @@ const allContent = [
         url: '/blog/how-not-to-love',
         contentFile: 'blog/how-not-to-love.html',
         emoji: '📝',
-        preview: "A quick recap of my first few days hitting the gym. It's been a journey of sore muscles and small victories..."
+        preview: "People talk about love like it’s the most natural thing in the world. As if..."
     },
-	{
+    {
         type: 'Blog',
         title: 'My First Few Days at the Gym',
         date: 'Sep 10, 2025',
@@ -53,6 +53,7 @@ const allContent = [
     }
 ];
 
+// Create list items with optimized rendering
 const createListItem = (item, options = {}) => {
     const { showPreview = true, cardType = 'full' } = options;
 
@@ -78,11 +79,7 @@ const createListItem = (item, options = {}) => {
             </div>
         ` : '';
 
-        if (cardType === 'featured') {
-            element.className = 'project-card featured-project-card';
-        } else {
-            element.className = 'project-card';
-        }
+        element.className = cardType === 'featured' ? 'project-card featured-project-card' : 'project-card';
 
         element.innerHTML = `
             <div class="project-image-placeholder">
@@ -118,6 +115,7 @@ const createListItem = (item, options = {}) => {
     }
 };
 
+// Render pages efficiently
 const renderPage = (pageType, containerId, options = {}) => {
     const { showPreview = true } = options;
     const templateId = {
@@ -125,8 +123,8 @@ const renderPage = (pageType, containerId, options = {}) => {
         'blog': 'blog-list-template',
         'about': 'more-template'
     }[pageType];
+    
     const templateNode = document.getElementById(templateId);
-
     if (!templateNode) {
         console.error(`Template with ID "${templateId}" not found.`);
         return document.createElement('div');
@@ -141,20 +139,23 @@ const renderPage = (pageType, containerId, options = {}) => {
     if (pageType === 'project') {
         const allContainer = template.querySelector('#all-projects-list-container');
         const projects = allContent.filter(item => item.type === 'Project');
-
+        const fragment = document.createDocumentFragment();
         projects.forEach(item => {
-            const projectItem = createListItem(item, { cardType: 'full' });
-            allContainer.appendChild(projectItem);
+            fragment.appendChild(createListItem(item, { cardType: 'full' }));
         });
+        allContainer.appendChild(fragment);
     } else if (pageType === 'blog') {
         const container = template.querySelector(`#${containerId}`);
         const items = allContent.filter(item => item.type.toLowerCase() === pageType);
-        items.forEach(item => container.appendChild(createListItem(item, { showPreview })));
+        const fragment = document.createDocumentFragment();
+        items.forEach(item => fragment.appendChild(createListItem(item, { showPreview })));
+        container.appendChild(fragment);
     }
 
     return template;
 };
 
+// Render blog post with share functionality
 const renderBlogPost = async (post) => {
     const template = document.getElementById('blog-post-template').content.cloneNode(true);
     const contentContainer = template.querySelector('#blog-post-content');
@@ -182,13 +183,14 @@ const renderBlogPost = async (post) => {
     try {
         const contentFilePath = `/${post.contentFile}`;
         const response = await fetch(contentFilePath);
-        if (!response.ok) throw new Error(`Post content file not found: ${contentFilePath} (Status: ${response.status})`);
+        if (!response.ok) throw new Error(`Post content file not found: ${contentFilePath}`);
         contentContainer.innerHTML = await response.text();
     } catch (error) {
         console.error('Error fetching blog post:', error);
-        contentContainer.innerHTML = `<p>Could not load the blog post content. Check if the file exists at '${post.contentFile}' and the path is correct relative to the root.</p>`;
+        contentContainer.innerHTML = `<p>Could not load the blog post content.</p>`;
     }
 
+    // Reading mode toggle
     const readingToggle = headerContainer.querySelector('#reading-mode-toggle');
     if (readingToggle) {
         readingToggle.addEventListener('click', () => {
@@ -196,6 +198,7 @@ const renderBlogPost = async (post) => {
         });
     }
 
+    // Share functionality
     const shareButton = headerContainer.querySelector('#share-button');
     const shareModal = document.getElementById('share-modal');
     const copyButton = document.getElementById('copy-url-button');
@@ -235,55 +238,40 @@ const renderBlogPost = async (post) => {
          });
     }
 
-
     return template;
 };
 
-
+// Main content and navigation
 const mainContent = document.getElementById('main-content');
 const siteHeader = document.getElementById('site-header');
 const pageContent = document.getElementById('page-content');
 let headerHeight = 60;
 let isNavigating = false;
 
+// Calculate header height
 function calculateHeaderHeight() {
     if(!siteHeader) return 60;
-    const initialStyles = {
-        position: siteHeader.style.position,
-        visibility: siteHeader.style.visibility,
-        display: siteHeader.style.display
-    };
-    siteHeader.style.position = 'absolute';
-    siteHeader.style.visibility = 'hidden';
-    siteHeader.style.display = 'block';
-
-    const height = siteHeader.offsetHeight;
-
-    siteHeader.style.position = initialStyles.position;
-    siteHeader.style.visibility = initialStyles.visibility;
-    siteHeader.style.display = initialStyles.display;
-
-    return height > 0 ? height : 60;
+    const rect = siteHeader.getBoundingClientRect();
+    return rect.height > 0 ? rect.height : 60;
 }
 
+// Update page padding based on header height
 function updatePagePadding() {
     headerHeight = calculateHeaderHeight();
     if (pageContent) {
-        // Increased padding between header and content from 20px to 40px
         pageContent.style.paddingTop = `${headerHeight + 40}px`;
     }
 }
 
-
+// Update active navigation link
 const updateActiveNav = (currentPath) => {
     const mainNav = document.querySelector('#site-header nav');
     if (!mainNav) return;
 
     const navLinks = mainNav.querySelectorAll('a.nav-link');
-    let activeLinkElement = null;
-
     navLinks.forEach(link => link.classList.remove('active'));
 
+    let activeLinkElement = null;
     navLinks.forEach(link => {
         const linkPath = link.getAttribute('href');
         if (linkPath === currentPath || (linkPath !== '/' && currentPath.startsWith(linkPath))) {
@@ -296,11 +284,11 @@ const updateActiveNav = (currentPath) => {
          const homeLink = mainNav.querySelector('a.nav-link[href="/"]');
          if (homeLink) {
              homeLink.classList.add('active');
-             activeLinkElement = homeLink;
          }
      }
 };
 
+// Apply stagger animation to page elements
 const applyStaggerAnimation = (currentPath) => {
     let items;
     if (currentPath === '/') {
@@ -322,6 +310,7 @@ const applyStaggerAnimation = (currentPath) => {
     });
 };
 
+// Define routes
 const routes = {
     '/': {
         title: "haku's desktop",
@@ -329,10 +318,15 @@ const routes = {
             const template = document.getElementById('about-template').content.cloneNode(true);
             const recentPostsContainer = template.querySelector('#recent-posts-container');
             const recentPosts = allContent.filter(item => item.type === 'Blog').slice(0, 3);
-            recentPosts.forEach(post => recentPostsContainer.appendChild(createListItem(post)));
+            const postsFragment = document.createDocumentFragment();
+            recentPosts.forEach(post => postsFragment.appendChild(createListItem(post)));
+            recentPostsContainer.appendChild(postsFragment);
+            
             const featuredContainer = template.querySelector('#featured-projects-container');
             const featuredProjects = allContent.filter(item => item.type === 'Project').slice(0, 3);
-            featuredProjects.forEach(project => featuredContainer.appendChild(createListItem(project, { cardType: 'featured' })));
+            const projectsFragment = document.createDocumentFragment();
+            featuredProjects.forEach(project => projectsFragment.appendChild(createListItem(project, { cardType: 'featured' })));
+            featuredContainer.appendChild(projectsFragment);
             return template;
         }
     },
@@ -350,6 +344,7 @@ const routes = {
     },
 };
 
+// Get page title
 const getPageTitle = (path) => {
     if (routes[path]) {
         return routes[path].title;
@@ -363,7 +358,7 @@ const getPageTitle = (path) => {
     return "haku's desktop";
 };
 
-
+// Load content for current page
 const loadContent = async () => {
     mainContent.innerHTML = '';
     mainContent.style.animation = '';
@@ -374,9 +369,8 @@ const loadContent = async () => {
     if (currentPath.endsWith('/index.html')) currentPath = currentPath.slice(0, -10) || '/';
 
     document.title = getPageTitle(currentPath);
-
-
     updateActiveNav(currentPath);
+    
     const currentBlogPostMatch = currentPath.match(/^\/blog\/(.*)$/);
 
     try {
@@ -387,13 +381,11 @@ const loadContent = async () => {
             if (post) {
                 contentFragment = await renderBlogPost(post);
             } else {
-                 console.warn("Blog post not found in allContent:", currentPath);
                  contentFragment = document.createTextNode('404 - Post not found.');
             }
         } else if (routes[currentPath]) {
             contentFragment = routes[currentPath].template();
         } else {
-             console.warn("Route not found:", currentPath);
              contentFragment = document.createTextNode('404 - Page not found.');
         }
 
@@ -407,8 +399,6 @@ const loadContent = async () => {
                 initFeaturedScroll();
             }
             initDockEffect('#site-header a.nav-link');
-
-
             applyStaggerAnimation(currentPath);
         });
 
@@ -424,7 +414,7 @@ const loadContent = async () => {
     }
 };
 
-
+// Router function
 const router = async (isInitialLoad = false) => {
     if (isNavigating && !isInitialLoad) return;
     isNavigating = true;
@@ -437,6 +427,7 @@ const router = async (isInitialLoad = false) => {
     }
 };
 
+// Dock effect with optimized performance
 const initDockEffect = (selector) => {
     const containers = new Set(
         Array.from(document.querySelectorAll(selector))
@@ -444,65 +435,77 @@ const initDockEffect = (selector) => {
             .filter(Boolean)
     );
 
-    if (containers.size === 0) {
-        return;
-    }
+    if (containers.size === 0) return;
 
     containers.forEach(eventTarget => {
         const items = eventTarget.querySelectorAll(selector);
         if (items.length === 0) return;
 
         let containerRect = eventTarget.getBoundingClientRect();
+        let rafId = null;
+
         const updateRect = () => {
             containerRect = eventTarget.getBoundingClientRect();
         };
 
-        eventTarget.addEventListener('mouseenter', updateRect);
-        window.addEventListener('resize', updateRect);
+        const handleMouseMove = (e) => {
+            if (rafId) return;
+            
+            rafId = requestAnimationFrame(() => {
+                const mouseX = e.clientX - containerRect.left;
 
-        eventTarget.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX - containerRect.left;
+                items.forEach(item => {
+                    const itemRect = item.getBoundingClientRect();
+                    const itemCenter = (itemRect.left - containerRect.left) + itemRect.width / 2;
+                    const distance = Math.abs(mouseX - itemCenter);
 
-            items.forEach(item => {
-                const itemRect = item.getBoundingClientRect();
-                const itemCenter = (itemRect.left - containerRect.left) + itemRect.width / 2;
-                const distance = Math.abs(mouseX - itemCenter);
+                    const effectWidth = 80;
+                    let maxScale = 1.2;
 
-                const effectWidth = 80;
-                let maxScale = 1.2;
+                    if (item.classList.contains('nav-link')) {
+                        maxScale = 1.1;
+                    } else if (item.classList.contains('skill-item')) {
+                        maxScale = 1.2;
+                    } else if (item.classList.contains('social-link')) {
+                        maxScale = 1.15;
+                    }
 
-                if (item.classList.contains('nav-link')) {
-                    maxScale = 1.1;
-                } else if (item.classList.contains('skill-item')) {
-                    maxScale = 1.2;
-                } else if (item.classList.contains('social-link')) {
-                    maxScale = 1.15;
-                }
+                    const minScale = 1;
+                    let scale = minScale;
 
-                const minScale = 1;
-                let scale = minScale;
+                    if (distance < effectWidth) {
+                        scale = minScale + (maxScale - minScale) * (1 + Math.cos(Math.PI * distance / effectWidth)) / 2;
+                    }
 
-                if (distance < effectWidth) {
-                    scale = minScale + (maxScale - minScale) * (1 + Math.cos(Math.PI * distance / effectWidth)) / 2;
-                }
-
-                item.style.transformOrigin = 'center bottom';
-                item.style.transform = `scale(${scale}) translateY(-${(scale - 1) * 8}px)`;
-                item.style.zIndex = distance < effectWidth / 2 ? '10' : '1';
+                    item.style.transformOrigin = 'center bottom';
+                    item.style.transform = `scale(${scale}) translateY(-${(scale - 1) * 8}px)`;
+                    item.style.zIndex = distance < effectWidth / 2 ? '10' : '1';
+                });
+                
+                rafId = null;
             });
-        });
+        };
 
-        eventTarget.addEventListener('mouseleave', () => {
+        const handleMouseLeave = () => {
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            }
             items.forEach(el => {
                 el.style.transform = 'scale(1) translateY(0)';
                 el.style.zIndex = '1';
                 el.style.transformOrigin = 'center center';
             });
-        });
+        };
+
+        eventTarget.addEventListener('mouseenter', updateRect);
+        eventTarget.addEventListener('mousemove', handleMouseMove);
+        eventTarget.addEventListener('mouseleave', handleMouseLeave);
+        window.addEventListener('resize', updateRect);
     });
 };
 
-
+// Featured projects scroll with improved performance
 const initFeaturedScroll = () => {
     const container = document.getElementById('featured-projects-container');
     const scrollLeftBtn = document.getElementById('scroll-left');
@@ -510,13 +513,13 @@ const initFeaturedScroll = () => {
 
     if (!container || !scrollLeftBtn || !scrollRightBtn) return;
 
-    let cardWidth = 200 + 12;
+    let cardWidth = 212; // 200px + 12px gap
 
     const updateCardWidth = () => {
         const card = container.querySelector('.featured-project-card');
         if (card) {
-             const style = window.getComputedStyle(card);
-             const gap = parseFloat(window.getComputedStyle(container).gap) || 12;
+             const style = window.getComputedStyle(container);
+             const gap = parseFloat(style.gap) || 12;
             cardWidth = card.offsetWidth + gap;
         }
     };
@@ -540,19 +543,21 @@ const initFeaturedScroll = () => {
         container.scrollBy({ left: cardWidth, behavior: 'smooth' });
     });
 
-    container.addEventListener('scroll', checkScrollButtons);
+    let scrollTimeout;
+    container.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(checkScrollButtons, 100);
+    });
 
     const resizeObserver = new ResizeObserver(() => {
         checkScrollButtons();
     });
     resizeObserver.observe(container);
-    resizeObserver.observe(document.body);
-
 
     setTimeout(checkScrollButtons, 100);
 };
 
-
+// Theme initialization
 const initTheme = () => {
     const themeToggle = document.getElementById('theme-switch-v2-container');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
@@ -570,7 +575,6 @@ const initTheme = () => {
 
     setTheme(currentTheme || (prefersDark.matches ? 'dark' : 'light'));
 
-
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             const newTheme = document.body.classList.contains('light-mode') ? 'dark' : 'light';
@@ -585,22 +589,30 @@ const initTheme = () => {
     });
 };
 
-
+// Event listeners
 window.addEventListener('popstate', () => router(false));
-window.addEventListener('resize', updatePagePadding);
+
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(updatePagePadding, 150);
+});
 
 window.addEventListener('load', () => {
     initTheme();
     updatePagePadding();
-
     router(true);
 
+    // Delegated event handling for better performance
     document.body.addEventListener('click', (e) => {
+        // Resume button
         if (e.target.closest('#resume-download-btn')) {
             e.preventDefault();
             alert('Resume link coming soon!');
+            return;
         }
 
+        // Internal links
         const internalLink = e.target.closest('.internal-app-link');
         if (internalLink && !e.metaKey && !e.ctrlKey) {
              e.preventDefault();
@@ -611,8 +623,10 @@ window.addEventListener('load', () => {
             } else if (href === window.location.pathname) {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+            return;
         }
 
+        // Nav link gradient pulse effect
         const navLink = e.target.closest('.nav-link');
         const themeToggleClicked = e.target.closest('#theme-switch-v2-container');
         if (navLink && !themeToggleClicked) {
@@ -635,5 +649,4 @@ window.addEventListener('load', () => {
             }, { once: true });
         }
     });
-
 });
