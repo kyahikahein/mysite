@@ -1,4 +1,4 @@
-const allContent = [
+ const allContent = [
     {
         type: 'Blog',
         title: "How Not to Love: A Manual of Restraint",
@@ -573,7 +573,12 @@ const initTheme = () => {
         localStorage.setItem('theme', theme);
     };
 
-    setTheme(currentTheme || (prefersDark.matches ? 'dark' : 'light'));
+    // Default to light mode for first-time visitors
+    if (currentTheme) {
+        setTheme(currentTheme);
+    } else {
+        setTheme('light');
+    }
 
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
