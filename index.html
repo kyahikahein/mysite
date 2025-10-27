@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>haku's desktop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://pbs.twimg.com/profile_images/1973151840440025089/h3RRqpQX_400x400.jpg" type="image/x-icon">
+</head>
+<body>
+    <div id="page-content" class="max-w-2xl mx-auto min-h-screen flex flex-col px-6 md:px-0">
+
+        <header id="site-header">
+             <div class="max-w-5xl mx-auto">
+                <div class="header-inner-styles">
+                     <nav class="flex justify-between items-center w-full gap-16">
+                        <div class="nav-home-link-container">
+                             <a href="/" class="nav-link dock-item internal-app-link">Home</a>
+                        </div>
+                         <div class="nav-links-container">
+                             <a href="/about" class="nav-link dock-item internal-app-link">About</a>
+                             <a href="/projects" class="nav-link dock-item internal-app-link">Projects</a>
+                             <a href="/blog" class="nav-link dock-item internal-app-link">Blog</a>
+                             <a href="https://0xhaku.gumroad.com/" target="_blank" class="nav-link dock-item">Notes</a>
+                            <div id="theme-switch-v2-container" class="theme-switch-v2">
+                                <div class="theme-switch-v2-thumb"></div>
+                            </div>
+                         </div>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <main id="main-content" class="flex-grow"></main>
+
+        <footer class="py-10 text-center text-sm footer-text">
+            <span>made with 💗 by haku © 2025</span>
+        </footer>
+    </div>
+
+    <div id="share-modal" class="share-modal hidden">
+        <div class="share-modal-content">
+            <span class="share-modal-close">&times;</span>
+            <p>Share this post:</p>
+            <button id="copy-url-button">Copy Link</button>
+            <div id="copy-status" class="copy-status"></div>
+        </div>
+    </div>
+
+
+    <template id="about-template">
+        <section id="about-section">
+            <div class="page-title-container">
+                 <h1 class="page-title">Hey, I'm <a href="/about" class="internal-link page-title-link internal-app-link">Haku</a> 👋🏻</h1>
+                 <div class="social-links-container">
+                    <a href="https://github.com/kyahikahein" target="_blank" title="GitHub" class="social-link dock-item">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12.014c0 4.43 2.864 8.167 6.84 9.49.5.092.683-.217.683-.482 0-.237-.009-.868-.014-1.704-2.782.604-3.369-1.342-3.369-1.342-.454-1.157-1.11-1.465-1.11-1.465-.908-.62.069-.608.069-.608 1.004.07 1.532 1.03 1.532 1.03.89 1.53 2.34 1.09 2.912.833.091-.647.35-1.09.635-1.34-2.22-.253-4.555-1.113-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.103-.253-.447-1.27.098-2.645 0 0 .84-.27 2.75 1.025A9.547 9.547 0 0112 6.844c.85.004 1.705.115 2.504.336 1.909-1.294 2.748-1.025 2.748-1.025.546 1.375.202 2.392.1 2.645.64.698 1.027 1.59 1.027 2.682 0 3.84-2.337 4.687-4.565 4.935.358.308.679.92.679 1.852 0 1.336-.012 2.415-.012 2.741 0 .268.18.578.688.48A10.01 10.01 0 0022 12.014C22 6.477 17.523 2 12 2z" clip-rule="evenodd" /></svg>
+                    </a>
+                    <a href="https://x.com/kyahikaheinx" target="_blank" title="X (Twitter)" class="social-link dock-item">
+                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                     <a href="https://www.youtube.com/@kyaahikahein" target="_blank" title="YouTube" class="social-link dock-item">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M19.806 7.887a2.454 2.454 0 0 0-1.732-1.732C16.6 5.7 12 5.7 12 5.7s-4.6 0-6.074.455a2.454 2.454 0 0 0-1.732 1.732C3.738 9.362 3.7 12 3.7 12s.038 2.638.494 4.113a2.454 2.454 0 0 0 1.732 1.732C7.4 18.3 12 18.3 12 18.3s4.6 0 6.074-.455a2.454 2.454 0 0 0 1.732-1.732C20.262 14.638 20.3 12 20.3 12s-.038-2.638-.494-4.113zM9.95 14.55v-5.1l4.473 2.55-4.473 2.55z" clip-rule="evenodd"></path></svg>
+                    </a>
+                    <a href="https://discord.com/users/imnottkratos" target="_blank" title="Discord" class="social-link dock-item">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.010c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.195.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                    </a>
+                    <a href="mailto:hakubbhai6871@gmail.com" title="Email" class="social-link dock-item">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" /><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" /></svg>
+                    </a>
+                 </div>
+            </div>
+
+            <a href="#" class="resume-button" id="resume-download-btn">
+                <span>Resume</span>
+                <svg class="download-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+            </a>
+
+            <div id="about-intro">
+                 <div class="space-y-4 text-base leading-relaxed">
+                    <p>I'm a second-year student passionate about IoT and electronics, exploring the space where hardware meets software. I enjoy breaking down complex problems, building useful things, and experimenting with new ideas.</p>
+                    <p>If I'm not working on a project, you might find me <a href="/blog" class="internal-link internal-app-link">writing</a> something new or diving into research. <a href="/about" class="internal-link internal-app-link">More about me →</a></p>
+                </div>
+            </div>
+
+            <section id="featured-projects">
+                 <div class="flex items-center justify-between">
+                    <h2 class="section-heading">Featured Projects</h2>
+                    <div id="featured-projects-controls" class="scroll-arrow-container">
+                        <button id="scroll-left" class="scroll-arrow" title="Scroll Left" disabled>&lt;</button>
+                        <button id="scroll-right" class="scroll-arrow" title="Scroll Right">&gt;</button>
+                    </div>
+                </div>
+                <ul id="featured-projects-container">
+                </ul>
+            </section>
+
+            <section id="recent-posts">
+                <h2 class="section-heading">Recent Posts</h2>
+                <div id="recent-posts-container"></div>
+                <a href="/blog" class="read-more-link internal-app-link">Read all posts →</a>
+            </section>
+        </section>
+    </template>
+
+    <template id="projects-template">
+        <section>
+            <h1 class="page-title">Projects</h1>
+            <p class="page-subtitle">A selection of projects I've worked on, separated by purpose.</p>
+
+            <h2 class="section-heading">All Projects</h2>
+            <ul id="all-projects-list-container" class="project-list-container">
+            </ul>
+
+        </section>
+    </template>
+
+    <template id="blog-list-template">
+         <section id="blog-list-section">
+            <h1 class="page-title">Blog</h1>
+            <p class="page-subtitle">This is where I write. I explore topics ranging from technology and coding to personal growth and new ideas.</p>
+            <div id="blog-list-container"></div>
+        </section>
+    </template>
+
+    <template id="blog-post-template">
+        <article>
+            <div id="blog-post-header"></div>
+            <div id="blog-post-content" class="prose"></div>
+        </article>
+    </template>
+
+    <template id="more-template">
+        <section id="more-about-me">
+            <div id="about-intro-full" class="mb-12">
+                <h1 class="page-title">Hey, I'm Haku 👋🏻</h1>
+                <div class="space-y-4 text-base leading-relaxed page-subtitle">
+                   <p>I'm a second-year student passionate about IoT and electronics, exploring the space where hardware meets software. I enjoy breaking down complex problems, building useful things, and experimenting with new ideas.</p>
+                   <p>If I'm not working on a project, you might find me <a href="/blog" class="internal-link internal-app-link">writing</a> something new or diving into research.</p>
+               </div>
+            </div>
+
+            <section id="education">
+                 <h2 class="section-heading-prose">Current Studies</h2>
+                 <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                             <img src="images/iot.png" alt="Studies" class="education-logo">
+                             <div>
+                                <p class="education-school">Formal Studies</p>
+                                <p class="education-degree">Currently pursuing a B.Tech degree with a focus on IoT & Electronics. (2024 - 2029)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <img src="images/extra.png" alt="Self-Study" class="education-logo">
+                            <div>
+                                <p class="education-school">Self-Learning</p>
+                                <p class="education-degree">Actively exploring topics in python, mathematics, micro-electronics, and systems design.</p>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </section>
+
+             <section id="skills">
+                <h2 class="section-heading-prose">Skills</h2>
+                <div class="skills-grid">
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" loading="lazy" class="skill-logo"><span>python</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" loading="lazy" class="skill-logo"><span>c++</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML" loading="lazy" class="skill-logo"><span>html</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" loading="lazy" class="skill-logo"><span>javascript</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" alt="Pandas" loading="lazy" class="skill-logo"><span>pandas</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" alt="NumPy" loading="lazy" class="skill-logo"><span>numpy</span></div>
+                     <div class="skill-item dock-item"><img src="https://raw.githubusercontent.com/matplotlib/matplotlib/main/doc/_static/favicon.ico" alt="Matplotlib" loading="lazy" class="skill-logo"><span>matplotlib</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matlab/matlab-original.svg" alt="MATLAB" loading="lazy" class="skill-logo"><span>matlab</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" loading="lazy" class="skill-logo"><span>mysql</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" loading="lazy" class="skill-logo"><span>git</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="VS Code" loading="lazy" class="skill-logo"><span>vs code</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" loading="lazy" class="skill-logo"><span>github</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/canva/canva-original.svg" alt="Canva" loading="lazy" class="skill-logo"><span>canva</span></div>
+                     <div class="skill-item dock-item"><img src="httpslogo"><span>davinci</span></div>
+                     <div class="skill-item dock-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/leetcode/leetcode-original.svg" alt="LeetCode" loading="lazy" class="skill-logo"><span>leetcode</span></div>
+                 </div>
+            </section>
+
+                <h3 class="section-heading-prose">📚 Favorite Book</h3>
+                <p>Man’s Search for Meaning — Viktor E. Frankl</p>
+
+                <h3 class="section-heading-prose">🎵 Music</h3>
+                <p>You can find my playlist on <a href="https://open.spotify.com/user/1mh3ivy5cj3omoc3jhnkoylgf?si=dd663ffc57544f96" target="_blank" class="internal-link">Spotify</a>.</p>
+            </div>
+        </section>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
+
