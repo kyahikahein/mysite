@@ -50,3 +50,4 @@ The easiest option: **VS Code Live Server extension**.
 1. **Clone the repository**
    ```bash
    git clone https://github.com/kyahikahein/hakudot.git
+# mysite
