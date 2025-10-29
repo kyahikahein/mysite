@@ -28,6 +28,7 @@
         description: 'An experimental project using language models to generate creative text formats.',
         url: 'https://crush-gpt.netlify.app/',
         imageUrl: 'project-preview/crush-gpt.png',
+        gradient: 'hsla(330, 80%, 60%, 0.15)',
         external: true,
         emoji: '💗',
         github: 'https://github.com/kyahikahein/crush-gpt',
@@ -43,6 +44,7 @@
         description: 'A web tool for bookmarking and organizing your favorite online resources with a stellar-themed interface.',
         url: 'https://star-vault.netlify.app/',
         imageUrl: 'project-preview/vault.png',
+        gradient: 'hsla(50, 80%, 60%, 0.15)',
         external: true,
         emoji: '⭐',
         github: 'https://github.com/kyahikahein/star-vault',
@@ -53,7 +55,6 @@
     }
 ];
 
-// Create list items with optimized rendering
 const createListItem = (item, options = {}) => {
     const { showPreview = true, cardType = 'full' } = options;
 
@@ -72,17 +73,13 @@ const createListItem = (item, options = {}) => {
                 <img src="${item.imageUrl}" alt="${item.title} preview" loading="lazy">
             </a>
         `;
-
-        const tagsHTML = item.tags && item.tags.length > 0 ? `
-            <div class="project-tags">
-                ${item.tags.slice(0, 3).map(tag => tag ? `<span class="tag-item">${tag}</span>` : '').join('')}
-            </div>
-        ` : '';
+        
+        const gradientStyle = item.gradient ? `background-image: radial-gradient(at 50% 0%, ${item.gradient} 0px, transparent 60%);` : '';
 
         element.className = cardType === 'featured' ? 'project-card featured-project-card' : 'project-card';
 
         element.innerHTML = `
-            <div class="project-image-placeholder">
+            <div class="project-image-placeholder" style="${gradientStyle}">
                 ${imageHTML}
             </div>
             <div class="project-content">
@@ -93,8 +90,6 @@ const createListItem = (item, options = {}) => {
                     </div>
                 </div>
                 <p class="item-description">${item.description}</p>
-                <h4 class="technologies-heading">Technologies</h4>
-                ${tagsHTML}
             </div>
         `;
         return element;
@@ -115,7 +110,6 @@ const createListItem = (item, options = {}) => {
     }
 };
 
-// Render pages efficiently
 const renderPage = (pageType, containerId, options = {}) => {
     const { showPreview = true } = options;
     const templateId = {
@@ -155,7 +149,6 @@ const renderPage = (pageType, containerId, options = {}) => {
     return template;
 };
 
-// Render blog post with share functionality
 const renderBlogPost = async (post) => {
     const template = document.getElementById('blog-post-template').content.cloneNode(true);
     const contentContainer = template.querySelector('#blog-post-content');
@@ -190,7 +183,6 @@ const renderBlogPost = async (post) => {
         contentContainer.innerHTML = `<p>Could not load the blog post content.</p>`;
     }
 
-    // Reading mode toggle
     const readingToggle = headerContainer.querySelector('#reading-mode-toggle');
     if (readingToggle) {
         readingToggle.addEventListener('click', () => {
@@ -198,7 +190,6 @@ const renderBlogPost = async (post) => {
         });
     }
 
-    // Share functionality
     const shareButton = headerContainer.querySelector('#share-button');
     const shareModal = document.getElementById('share-modal');
     const copyButton = document.getElementById('copy-url-button');
@@ -241,21 +232,18 @@ const renderBlogPost = async (post) => {
     return template;
 };
 
-// Main content and navigation
 const mainContent = document.getElementById('main-content');
 const siteHeader = document.getElementById('site-header');
 const pageContent = document.getElementById('page-content');
 let headerHeight = 60;
 let isNavigating = false;
 
-// Calculate header height
 function calculateHeaderHeight() {
     if(!siteHeader) return 60;
     const rect = siteHeader.getBoundingClientRect();
     return rect.height > 0 ? rect.height : 60;
 }
 
-// Update page padding based on header height
 function updatePagePadding() {
     headerHeight = calculateHeaderHeight();
     if (pageContent) {
@@ -263,7 +251,6 @@ function updatePagePadding() {
     }
 }
 
-// Update active navigation link
 const updateActiveNav = (currentPath) => {
     const mainNav = document.querySelector('#site-header nav');
     if (!mainNav) return;
@@ -288,7 +275,6 @@ const updateActiveNav = (currentPath) => {
      }
 };
 
-// Apply stagger animation to page elements
 const applyStaggerAnimation = (currentPath) => {
     let items;
     if (currentPath === '/') {
@@ -310,7 +296,6 @@ const applyStaggerAnimation = (currentPath) => {
     });
 };
 
-// Define routes
 const routes = {
     '/': {
         title: "haku's desktop",
@@ -344,7 +329,6 @@ const routes = {
     },
 };
 
-// Get page title
 const getPageTitle = (path) => {
     if (routes[path]) {
         return routes[path].title;
@@ -358,7 +342,6 @@ const getPageTitle = (path) => {
     return "haku's desktop";
 };
 
-// Load content for current page
 const loadContent = async () => {
     mainContent.innerHTML = '';
     mainContent.style.animation = '';
@@ -414,7 +397,6 @@ const loadContent = async () => {
     }
 };
 
-// Router function
 const router = async (isInitialLoad = false) => {
     if (isNavigating && !isInitialLoad) return;
     isNavigating = true;
@@ -427,7 +409,6 @@ const router = async (isInitialLoad = false) => {
     }
 };
 
-// Dock effect with optimized performance
 const initDockEffect = (selector) => {
     const containers = new Set(
         Array.from(document.querySelectorAll(selector))
@@ -505,7 +486,6 @@ const initDockEffect = (selector) => {
     });
 };
 
-// Featured projects scroll with improved performance
 const initFeaturedScroll = () => {
     const container = document.getElementById('featured-projects-container');
     const scrollLeftBtn = document.getElementById('scroll-left');
@@ -513,7 +493,7 @@ const initFeaturedScroll = () => {
 
     if (!container || !scrollLeftBtn || !scrollRightBtn) return;
 
-    let cardWidth = 212; // 200px + 12px gap
+    let cardWidth = 212; 
 
     const updateCardWidth = () => {
         const card = container.querySelector('.featured-project-card');
@@ -557,7 +537,6 @@ const initFeaturedScroll = () => {
     setTimeout(checkScrollButtons, 100);
 };
 
-// Theme initialization
 const initTheme = () => {
     const themeToggle = document.getElementById('theme-switch-v2-container');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
@@ -573,7 +552,6 @@ const initTheme = () => {
         localStorage.setItem('theme', theme);
     };
 
-    // Default to light mode for first-time visitors
     if (currentTheme) {
         setTheme(currentTheme);
     } else {
@@ -594,7 +572,6 @@ const initTheme = () => {
     });
 };
 
-// Event listeners
 window.addEventListener('popstate', () => router(false));
 
 let resizeTimeout;
@@ -608,16 +585,13 @@ window.addEventListener('load', () => {
     updatePagePadding();
     router(true);
 
-    // Delegated event handling for better performance
     document.body.addEventListener('click', (e) => {
-        // Resume button
         if (e.target.closest('#resume-download-btn')) {
             e.preventDefault();
             alert('Resume link coming soon!');
             return;
         }
 
-        // Internal links
         const internalLink = e.target.closest('.internal-app-link');
         if (internalLink && !e.metaKey && !e.ctrlKey) {
              e.preventDefault();
@@ -631,7 +605,6 @@ window.addEventListener('load', () => {
             return;
         }
 
-        // Nav link gradient pulse effect
         const navLink = e.target.closest('.nav-link');
         const themeToggleClicked = e.target.closest('#theme-switch-v2-container');
         if (navLink && !themeToggleClicked) {
@@ -655,3 +628,4 @@ window.addEventListener('load', () => {
         }
     });
 });
+
